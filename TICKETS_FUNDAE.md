@@ -119,3 +119,13 @@
 - Completados: 10 tickets
 - Pendientes: 12+ tickets
 - Tiempo estimado restante: ~10-15 horas
+
+## [NOTA-001] Cursos NO bonificables a revisar
+
+### GKN Automotive - Alemán (3 cursos sin alta FUNDAE)
+- **3162** - Jon Garcia (Alemán)
+- **3163** - Maddi Olarriaga (Alemán)
+- **3164** - Ion Mikel Arin (Alemán)
+- ⚠️ Revisar si se olvidó dar de alta en FUNDAE
+- ⚠️ Si era intención bonificar: dar de alta + actualizar bonificable=1
+- Fecha nota: 2026-06-13
