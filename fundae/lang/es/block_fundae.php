@@ -2,6 +2,7 @@
 $string['pluginname'] = 'Dashboard FUNDAE';
 $string['fundae:addinstance'] = 'Agregar bloque FUNDAE al panel';
 $string['fundae:myaddinstance'] = 'Agregar bloque FUNDAE a mi panel';
+$string['privacy:metadata'] = 'El bloque FUNDAE solo muestra datos almacenados en otras ubicaciones.';
 
 $string['c_fundae'] = 'C/Fundae';
 $string['course'] = 'Curso';
