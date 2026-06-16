@@ -129,3 +129,68 @@
 - ⚠️ Revisar si se olvidó dar de alta en FUNDAE
 - ⚠️ Si era intención bonificar: dar de alta + actualizar bonificable=1
 - Fecha nota: 2026-06-13
+
+## [NOTA-003] CIF VIFERME Asesores S.L. - verificar
+- CIF actual en BBDD: B6355458 (8 caracteres, INVÁLIDO)
+- Los CIF españoles son 1 letra + 8 dígitos
+- Verificar con cliente o registro mercantil
+- Fecha: 2026-06-13
+
+---
+
+## Sesión 16/06/2026 — Requerimientos SEPE Navarra
+
+### [TICKET-023] Requerimientos SEPE — Infraestructura BD
+- Creadas 4 tablas nuevas en aulatuspeaking35:
+  - `mdl_fundae_guia_didactica` — metadatos guías didácticas por curso
+  - `mdl_fundae_requerimientos` — registro requerimientos SEPE recibidos
+  - `mdl_fundae_documentos` — repositorio central documentos generados
+  - `mdl_fundae_docentes` — perfiles estructurados docentes FUNDAE
+- Poblada `mdl_fundae_guia_didactica` con todos los cursos activos
+- Registrados 23 CVs de docentes en `mdl_fundae_documentos`
+- Registrados 8 requerimientos en `mdl_fundae_requerimientos`
+- Estado: ✅ Completado
+
+### [TICKET-024] Scripts generadores FUNDAE
+- `gen_guia_didactica.py` — generador genérico guías didácticas PDF (aulatuspeaking)
+- `gen_perfil_docente.py` — generador perfiles docentes Moodle (aulatuspeaking)
+- `gen_calificaciones.py` — libro calificaciones 6 alumnos e2y Commerce
+- `gen_calificaciones_single.py` — calificaciones alumno individual
+- Paneles PHP: `fundae_grupos.php`, `fundae_calificaciones.php`
+- Estado: ✅ Completado
+
+### [TICKET-025] Requerimiento 119222 — Dermostética AF029/01
+- Empresa: Dermatología Científica S.L. (CIF B97436331)
+- Alumnas: Ana Franqueza + Imma Torres (course 3178)
+- Tutora: Amber Gendron
+- Documentos generados: contrato, Doc2, CV, Doc4, Doc5 (x2), Doc6 (x2)
+- Carpeta: `06:029-01 - Dermoestetica - Naqua/`
+- BD: registrado en mdl_fundae_requerimientos + mdl_fundae_documentos
+- Estado: ✅ Docs generados · ⏳ Pendiente subir a empresas.fundae.es
+
+### [TICKET-026] Requerimiento 254387 — Attrim AF040/01
+- Empresa: Attrim Impact Technology Group S.L. (CIF B72808983)
+- Alumna: Inés Guillén Luengo (course 3211)
+- Tutor: Rj Reddy
+- Documentos generados: contrato, Doc2, CV, Doc4, Doc5, Doc6
+- Carpeta: `07:040-01 - Attrim - Ines Guillen/`
+- BD: registrado en mdl_fundae_requerimientos + mdl_fundae_documentos
+- Estado: ✅ Docs generados · ⏳ Pendiente subir a empresas.fundae.es
+
+### [TICKET-027] Perfiles docentes FUNDAE — mdl_fundae_docentes
+- Template HTML corporativo creado con secciones FUNDAE obligatorias
+- Amber Gendron (user_id=2395) — perfil completo registrado y sincronizado
+- Perfil Moodle actualizado con competencias tecnológicas teleformación
+- CV URL curso 3178 corregido: Kate Klopper → Amber Gendron
+- 18 docentes pendientes de poblar
+- 5 sin CV: Eldina, Guillaume, Odile, Paola, Rj Reddy
+- Estado: 🔄 En curso
+
+### [TICKET-028] Requerimientos pendientes — Próximas acciones
+- 🔴 250586 · AF034/01 · Naqua · Eduardo · Vencido -11 días
+- 🔴 102770 · AF010/02 · RUBI · Kate · Vencido -12 días
+- 🔴 104208 · AF012/05 · RUBI · Kiara · Vencido -13 días
+- 🔴 102348 · AF009/04 · Micro Ventures · Jessica · Vencido -7 días
+- 🔴 102907 · AF010/06 · RUBI · Amber · Vencido -4 días
+- 🟠 57996 · AF007/01 · e2y Linda · Vence 19/06 (+3 días)
+- Estado: ⏳ Pendiente
