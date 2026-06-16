@@ -132,3 +132,77 @@ Curso "Curso de Inglés Nivel Intermedio"  (shortname = denominación oficial)
 ## Autor
 Equipo Desarrollo Aula TuSpeaking
 Fecha: 2026-06-13
+
+
+---
+
+## Actualizacion 16/06/2026 - Nuevas tablas para gestion de requerimientos
+
+### Tabla fundae_oficial_stg (Fuente de la verdad absoluta)
+Datos exportados directamente del portal FUNDAE. No editar manualmente.
+- id_grupo, aff, grupo, c_fundae
+- denominacion_oficial, modalidad, duracion
+- fecha_inicio, fecha_fin, estado, participantes
+
+ADVERTENCIA: Esta tabla es la FUENTE DE LA VERDAD. Siempre usar sobre mdl_fundae para denominacion, modalidad y horas oficiales.
+
+### Tabla mdl_fundae_guia_didactica
+Metadatos para generacion automatica de guias didacticas PDF.
+- c_fundae (UNIQUE) → fundae_oficial_stg
+- tutor_fundae_nombre, tutor_moodle_userid, tutor_real_userid, tutor_teams_userid
+- herramienta_sincrona: ENUM(Zoom, Teams, Meet)
+- objetivo_general, objetivos_especificos, criterio_evaluacion
+- pdf_path, pdf_generado_at
+- estado: ENUM(pendiente, generado, revisado)
+
+### Tabla mdl_fundae_requerimientos
+Registro de requerimientos recibidos del SEPE Navarra.
+- c_fundae, id_grupo, csv_fundae
+- fecha_escrito, fecha_recepcion, fecha_vencimiento (10 dias habiles)
+- docs_solicitados (JSON), docs_entregados (JSON)
+- observaciones_sepe, estado: ENUM(pendiente, en_curso, respondido, vencido)
+- empresa, modalidad, registro_salida, respondido_por, tipo_accion
+
+### Tabla mdl_fundae_documentos
+Repositorio central de todos los documentos FUNDAE generados.
+- tipo_documento: ENUM(contrato_encomienda, cv_docente, guia_didactica, acceso_plataforma, conexiones_zoom, seguimiento_tutorial, control_asistencia, hoja_actuacion_fpe, entrevista_fpe, material_didactico, diplomas, calificaciones)
+- c_fundae (NULL si es documento reutilizable de empresa)
+- cif_empresa, user_id (para CVs)
+- path_archivo, nombre_archivo, fecha_documento
+- reutilizable: 1=contrato/CV, 0=especifico por expediente
+- vigente: 1=activo, 0=reemplazado
+
+### Tabla mdl_fundae_docentes
+Perfiles estructurados de docentes para cumplimiento FUNDAE.
+- user_id (UNIQUE) → mdl_user
+- nombre_completo, titulo_rol, perfil_profesional
+- experiencia_json, formacion_json, competencias_json
+- anos_teleformacion, certificado_tefl, horas_tefl, idiomas
+- perfil_html (HTML generado con template corporativo tuSpeaking)
+- perfil_sync: 1=sincronizado con mdl_user.description
+
+---
+
+## Scripts disponibles en /home/aulatuspeaking/
+
+| Script | Descripcion |
+|---|---|
+| gen_guia_didactica.py | Generador guias didacticas PDF — python3 gen_guia_didactica.py --c_fundae 040-01 |
+| gen_perfil_docente.py | Generador perfiles docentes Moodle — python3 gen_perfil_docente.py --all |
+| gen_calificaciones.py | Libro calificaciones e2y Commerce — python3 gen_calificaciones.py --output /tmp |
+| gen_calificaciones_single.py | Calificaciones alumno individual |
+
+---
+
+## Estado requerimientos 16/06/2026
+
+| ID Grupo | AF | Empresa | Estado |
+|---|---|---|---|
+| 119222 | 029/01 | Dermostetica | Docs generados - Pendiente subir a FUNDAE |
+| 254387 | 040/01 | Attrim | Docs generados - Pendiente subir a FUNDAE |
+| 104208 | 012/05 | RUBI Kiara | Vencido -13 dias |
+| 102770 | 010/02 | RUBI Kate | Vencido -12 dias |
+| 250586 | 034/01 | Naqua Eduardo | Vencido -11 dias |
+| 102348 | 009/04 | Micro Ventures Jessica | Vencido -7 dias |
+| 102907 | 010/06 | RUBI Amber | Vencido -4 dias |
+| 57996 | 007/01 | e2y Linda | Vence 19/06 |
