@@ -194,3 +194,61 @@
 - 🔴 102907 · AF010/06 · RUBI · Amber · Vencido -4 días
 - 🟠 57996 · AF007/01 · e2y Linda · Vence 19/06 (+3 días)
 - Estado: ⏳ Pendiente
+
+## TICKET: Bloque Inspector FUNDAE dentro del curso
+**Fecha:** 18/06/2026
+**Prioridad:** Media
+
+### Problema
+El inspector FUNDAE al entrar en un curso ve la vista del alumno con demasiado ruido:
+- 24 participantes mezclados (alumnos + profesores)
+- Tiene que navegar por varios menús para encontrar la info relevante
+- No hay acceso directo a los informes clave
+
+### Solución propuesta
+Crear un bloque custom visible SOLO para el rol `supervisor` dentro de cada curso con:
+1. **Alumno** — nombre, DNI, email
+2. **Clases realizadas** — link directo a `tutorias_con_profesor.php?courseid=X`
+3. **Progreso plataforma** — % completado + link al informe
+4. **Evaluación tutorial** — link al seguimiento
+5. **Calificación** — estado (pendiente hasta fecha fin)
+
+### Archivos a modificar
+- `~/.ftp-users/moodle/blocks/fundae/block_fundae.php` (servidor)
+- `/Users/tuspeaking/Proyectos/requirimientos FUNDAE/fundae/block_fundae.php` (local)
+
+### Notas
+- El bloque debe leer el `c_fundae` y `courseid` de `mdl_fundae` para identificar al alumno
+- Solo visible para rol `supervisor`
+- Acceso directo a los 3 puntos clave sin navegación adicional
+
+### Acceso directo necesario
+- URL objetivo: tutorias_con_profesor.php?courseid=X&userid=Y
+- 'Mis Clases' aparece vacío para supervisor — ocultar para ese rol
+- Navegación actual: Administración → Tutorías con profesor → seleccionar alumno (3 pasos)
+- Con bloque: 1 clic directo al informe del alumno correcto
+
+
+### Bug: Descargar Excel en Tutorías con profesor
+- El botón 'Descargar Excel' a veces da errores
+- Revisar el handler de exportación
+- Prioridad: Media (el inspector puede necesitar descargar el informe)
+
+
+### Informes relevantes para inspector
+De la pestaña Informes, solo son útiles:
+- Registros (logs): /report/log/index.php?id=X
+- Finalización de actividad: para ver % completado (75% requerido)
+- Participación en el curso: tiempo dedicado
+
+El bloque debería tener acceso directo a estos 3 informes específicos.
+Ocultar o simplificar el resto para el rol supervisor.
+
+
+### URLs clave para el inspector
+- Tutorías con profesor: /app/moodle/tutorias_con_profesor.php?courseid=X
+- Registros (logs): /app/moodle/report/log/index.php?id=X
+- Finalización de actividad: /app/moodle/report/progress/index.php?course=X
+
+Estas 3 URLs deben ser acceso directo en el bloque inspector FUNDAE.
+
