@@ -144,7 +144,81 @@ class block_fundae extends block_base {
             
             $html .= '<script>(function(){var s=document.getElementById("' . $uid . '_search"),e=document.getElementById("' . $uid . '_empresa"),m=document.getElementById("' . $uid . '_modalidad"),b=document.getElementById("' . $uid . '_bonif"),c=document.getElementById("' . $uid . '_count"),t=document.getElementById("' . $uid . '_table"),r=t.querySelectorAll("tbody tr");function f(){var q=s.value.toLowerCase(),ev=e.value,mv=m.value,bv=b.value,v=0;r.forEach(function(x){var tx=x.textContent.toLowerCase(),ms=q===""||tx.indexOf(q)!==-1,me=ev===""||x.dataset.empresa===ev,mm=mv===""||x.dataset.modalidad===mv,mb=bv===""||x.dataset.bonif===bv;if(ms&&me&&mm&&mb){x.style.display="";v++}else x.style.display="none"});c.textContent=v+" cursos"}s.addEventListener("input",f);e.addEventListener("change",f);m.addEventListener("change",f);b.addEventListener("change",f);})();</script>';
         }
-        
+
+        // ===== Panel del inspector FUNDAE dentro del curso =====
+        // Solo en contexto de curso y solo para el rol supervisor (o admin del sitio).
+        if ($courseid && !empty($cursos)) {
+            global $USER;
+            $issupervisor = is_siteadmin();
+            if (!$issupervisor) {
+                foreach (get_user_roles($this->page->context, $USER->id, true) as $ro) {
+                    if ($ro->shortname === 'supervisor') { $issupervisor = true; break; }
+                }
+            }
+            if ($issupervisor) {
+                $logurl  = $CFG->wwwroot . '/report/log/index.php?id=' . $courseid;
+                $progurl = $CFG->wwwroot . '/report/progress/index.php?course=' . $courseid;
+                $tuturl  = $CFG->wwwroot . '/tutorias_con_profesor.php?courseid=' . $courseid;
+
+                $html .= '<div style="background:#fff;border:1px solid ' . $teal . ';border-radius:6px;padding:12px;margin-top:15px;">';
+                $html .= '<div style="font-weight:bold;color:' . $teal_dark . ';margin-bottom:8px;">Panel del inspector &mdash; informes de este curso</div>';
+
+                // Accesos directos a nivel de curso.
+                $html .= '<div style="margin-bottom:6px;">';
+                $html .= '<a href="' . $tuturl . '" target="_blank" style="display:inline-block;margin:3px;padding:6px 10px;background:' . $teal . ';color:#fff;text-decoration:none;border-radius:4px;font-size:12px;">Tutorías / clases con profesor</a>';
+                $html .= '<a href="' . $logurl . '" target="_blank" style="display:inline-block;margin:3px;padding:6px 10px;background:' . $teal . ';color:#fff;text-decoration:none;border-radius:4px;font-size:12px;">Registros (logs)</a>';
+                $html .= '<a href="' . $progurl . '" target="_blank" style="display:inline-block;margin:3px;padding:6px 10px;background:' . $teal . ';color:#fff;text-decoration:none;border-radius:4px;font-size:12px;">Finalización de actividad</a>';
+                $html .= '</div>';
+
+                // Alumnos por acción formativa (grupo cuyo nombre = c_fundae).
+                foreach ($cursos as $r) {
+                    $af = $r->c_fundae;
+                    if (empty($af)) { continue; }
+                    $alumnos = $DB->get_records_sql(
+                        "SELECT u.id, u.firstname, u.lastname, u.idnumber, u.email
+                           FROM {groups} g
+                           JOIN {groups_members} gm ON gm.groupid = g.id
+                           JOIN {user} u ON u.id = gm.userid
+                          WHERE g.courseid = :cid AND g.name = :gname
+                          ORDER BY u.lastname, u.firstname",
+                        ['cid' => $courseid, 'gname' => $af]);
+
+                    $html .= '<div style="margin-top:10px;font-size:12px;color:#555;"><strong>AF ' . htmlspecialchars($af) . '</strong>'
+                           . ($r->grupo ? ' &middot; Grupo ' . htmlspecialchars($r->grupo) : '')
+                           . ' &middot; ' . htmlspecialchars($r->empresa) . '</div>';
+
+                    // Guía didáctica de la AF (PDF servido bajo demanda por fundae_guia.php).
+                    $guiaurl = $CFG->wwwroot . '/fundae_guia.php?c_fundae=' . urlencode($af);
+                    $html .= '<div style="margin:3px 0 4px;"><a href="' . $guiaurl . '" target="_blank" style="display:inline-block;padding:5px 9px;background:' . $teal_dark . ';color:#fff;text-decoration:none;border-radius:4px;font-size:11px;">Guía didáctica (PDF)</a></div>';
+
+                    if (empty($alumnos)) {
+                        $html .= '<div style="font-size:11px;color:#999;padding:4px 0;">Sin alumnos en el grupo &laquo;' . htmlspecialchars($af) . '&raquo;.</div>';
+                        continue;
+                    }
+                    $html .= '<table style="width:100%;border-collapse:collapse;font-size:11px;margin:4px 0 8px;">';
+                    $html .= '<thead><tr style="background:' . $teal_light . ';">'
+                           . '<th style="padding:5px;text-align:left;">Alumno</th>'
+                           . '<th style="padding:5px;text-align:left;">DNI</th>'
+                           . '<th style="padding:5px;text-align:center;">Tutorías</th>'
+                           . '<th style="padding:5px;text-align:center;">Calificaciones</th>'
+                           . '</tr></thead><tbody>';
+                    foreach ($alumnos as $al) {
+                        $tut_al = $CFG->wwwroot . '/tutorias_con_profesor.php?courseid=' . $courseid . '&userid=' . $al->id;
+                        $cal_al = $CFG->wwwroot . '/grade/report/user/index.php?id=' . $courseid . '&userid=' . $al->id;
+                        $html .= '<tr style="border-bottom:1px solid #eee;">'
+                               . '<td style="padding:5px;">' . htmlspecialchars($al->lastname . ', ' . $al->firstname) . '</td>'
+                               . '<td style="padding:5px;font-family:monospace;">' . htmlspecialchars($al->idnumber ?: '-') . '</td>'
+                               . '<td style="padding:5px;text-align:center;"><a href="' . $tut_al . '" target="_blank" style="color:' . $teal_dark . ';font-weight:bold;">Ver</a></td>'
+                               . '<td style="padding:5px;text-align:center;"><a href="' . $cal_al . '" target="_blank" style="color:' . $teal_dark . ';font-weight:bold;">Ver</a></td>'
+                               . '</tr>';
+                    }
+                    $html .= '</tbody></table>';
+                }
+                $html .= '</div>';
+            }
+        }
+        // ===== fin panel del inspector =====
+
         $html .= '</div>';
         $this->content->text = $html;
         return $this->content;

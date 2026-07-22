@@ -13,9 +13,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2026072200;
+$plugin->version   = 2026072201;
 $plugin->requires  = 2017050500;
 $plugin->component = 'block_fundae';
 $plugin->maturity  = MATURITY_BETA;
-$plugin->release   = '1.1.0';
+$plugin->release   = '1.2.0';
 $plugin->cron      = 0;
