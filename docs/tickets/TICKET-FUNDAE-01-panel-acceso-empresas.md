@@ -272,8 +272,11 @@ R2 (fuera recuadro), columnas finales (fuera Bonificable/NO-FUNDAE/Grupo suelto)
 orden FUNDAE. Resultado: se ven TODAS las bonificables (incl. Alua); el `ID` sale relleno en las
 reconciliadas y **en blanco en las demás** — ese hueco es una señal útil de "pendiente de reconciliar".
 
-**Estado Fase 1:** ✅ CÓDIGO LISTO en `fundae/block_fundae.php` (reescrito 6-ago). Pendiente
-commit + deploy (copiar bloque a `/mnt/moodle-data/moodle-code/blocks/fundae/` + `purge_caches`).
+**Estado Fase 1:** ✅ **DESPLEGADO Y VERIFICADO 6-ago** (commit `a9c31ed` rama `dev`; deploy a
+`/mnt/moodle-data/moodle-code/blocks/fundae/` + purge_caches). Verificado en prod: 133 acciones,
+columnas FUNDAE, sin recuadro/Bonificable/NO-FUNDAE, ID relleno donde reconcilia y "—" donde no
+(Alua), Tipo Propia/Externa, y **modalidad corregida a Teleformación** (bug resuelto vía join oficial).
+Los "—" del ID son la lista de trabajo de la **Fase 2** (reconciliar c_fundae).
 Detalle técnico: SQL `FROM {fundae} f JOIN {course} c LEFT JOIN fundae_oficial_stg o ON o.c_fundae=f.c_fundae WHERE f.bonificable=1`; `fundae_oficial_stg` SIN llaves (no lleva prefijo Moodle); `get_records_sql` keyea por `f.id` (único). Columnas: ID · Acción/Grupo · Tipo de acción · Denom. · Inicio · Fin · Empresa · Razón Social · CIF · Modalidad · Ver.
 
 **FASE 2 — reconciliación de datos (tarea aparte):** corregir `c_fundae` en `mdl_fundae`
