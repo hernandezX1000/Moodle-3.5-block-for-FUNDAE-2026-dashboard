@@ -300,6 +300,59 @@ excluir lo que ya esté en Learn (no intentar recuperar esas claves en Moodle).
 
 ---
 
+### Principio de uso (6-ago) — la tabla es un ÍNDICE, no reporting
+
+**Propósito:** que FUNDAE **identifique la acción formativa y navegue al curso** en Moodle.
+NO replicar lo que FUNDAE ya muestra en su portal. No hay sistema integrado que mantenga
+`estado`/participantes/etc., así que **no se añaden filtros de reporting** (Estado, Vigencia…):
+serían datos sin mantener y duplicarían FUNDAE.
+
+**Filtros/buscadores relevantes (decisión):**
+- **Buscador** = pieza central. Ya filtra por texto completo de la fila → localiza por ID,
+  Acción/Grupo, empresa, CIF y denominación. Mejora pendiente: placeholder explícito
+  ("Buscar por ID, acción/grupo, empresa, CIF o denominación…").
+- **Empresa** = se mantiene.
+- **Tipo (Propia/Externa)** = opcional, valor bajo.
+- **Descartados:** Estado, Vigencia, Modalidad como filtros (reporting, no mantenido, duplica FUNDAE).
+
+---
+
+### Fase 2 — hallazgos de calidad de datos (6-ago)
+
+El dashboard nuevo destapó huecos en `mdl_fundae` (esto es su valor). Caso GDES (12 filas):
+`c_fundae` NULL, `razon_social` NULL, `cif` NULL, `gestion_bonificacion`="Micro Ventures SL"
+(→ Tipo sale "Propia" cuando Hansel dice que GDES es **Externa**).
+
+Correcciones de datos pendientes (Fase 2, con backup + confirmación):
+- **Tipo/gestión:** si empresa es Externa pero `gestion_bonificacion`="Micro Ventures SL",
+  corregir a "Empresa Externa". (CONFIRMAR por empresa — "Micro Ventures SL" suele = gestión
+  propia de tuSpeaking.)
+- **Razón social / CIF NULL:** rellenar (valores los aporta Hansel; no inventar).
+- **`c_fundae` NULL / malformado:** parte de la reconciliación con `fundae_oficial_stg`
+  (excluir lo migrado a Learn).
+- **Método:** primero query de alcance (por empresa: filas, sin_razon, sin_cif, sin_cfundae,
+  gestiones) para limpiar en bloque, no fila a fila.
+
+**Worklist de datos incompletos (query alcance 6-ago) — SOLO 4 empresas:**
+- GDES (12 filas), Lactalis (5), Lactalis ID (2), Naqua (2 de 3) → sin razón social, sin CIF, sin c_fundae.
+- Las otras 21 empresas están completas.
+- Dudas a resolver con Hansel: (a) ¿GDES es Externa (corregir gestión) o Propia por dato?;
+  (b) ¿"Lactalis" y "Lactalis ID" son la misma empresa (duplicado)?; (c) razón social + CIF reales
+  (los aporta Hansel); (d) ¿alguna de las 4 se va a Learn? (si sí, no tocar en Moodle).
+- Tipo/gestión: regla confirmada — "Empresa Externa"→Externa (la gestiona la empresa),
+  "Micro Ventures SL"→Propia (la gestiona tuSpeaking). Solo Alua y Lin3s son Externa hoy.
+
+**✅ HECHO 6-ago — corrección de gestión (Tipo):** `UPDATE mdl_fundae SET
+gestion_bonificacion='Empresa Externa' WHERE empresa IN ('GDES','Lactalis','Lactalis ID')`
+(19 filas). Naqua se queda Propia. Backup: tabla `mdl_fundae_bak_20260806` (borrar cuando se
+valide). Ahora Externa hoy: Alua, Lin3s, GDES, Lactalis, Lactalis ID.
+
+**PENDIENTE Fase 2 (necesita valores de Hansel):** rellenar `razon_social` + `cif` de GDES,
+Lactalis, Lactalis ID y Naqua (todos NULL). Y reconciliar `c_fundae` NULL con el oficial
+(excluyendo lo migrado a Learn). Pendiente también: ¿Lactalis y Lactalis ID son la misma empresa?
+
+---
+
 ## 4. Diseño técnico
 _(pendiente — se completa cuando terminen de recogerse los requisitos)_
 
