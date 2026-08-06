@@ -75,7 +75,25 @@ WHERE f.bonificable=1 AND (f.c_fundae IS NULL OR f.c_fundae='') ORDER BY f.empre
 SELECT CONCAT(u.firstname,' ',u.lastname) alumno, u.email
 FROM mdl_user_enrolments ue JOIN mdl_enrol e ON e.id=ue.enrolid JOIN mdl_user u ON u.id=ue.userid
 WHERE e.courseid = <COURSEID> AND u.email NOT LIKE '%tuspeaking.com';
+
+-- (E) AUDITORÍA DE COHERENCIA: enlace válido + código reflejado como grupo del curso
+--     Devuelve SOLO las filas con problema (enlace roto o código no está como grupo).
+SELECT f.id, f.empresa, f.c_fundae, f.courseid, c.shortname,
+  CASE WHEN c.id IS NULL THEN 'SIN CURSO' ELSE 'ok' END AS enlace,
+  CASE WHEN EXISTS(
+     SELECT 1 FROM mdl_groups g WHERE g.courseid=f.courseid
+       AND REPLACE(REPLACE(LOWER(g.name),'/','-'),' ','')
+           LIKE CONCAT('%', REPLACE(REPLACE(LOWER(f.c_fundae),'/','-'),' ',''), '%'))
+       THEN 'ok' ELSE 'FALTA CODIGO EN GRUPO' END AS codigo_en_curso
+FROM mdl_fundae f LEFT JOIN mdl_course c ON c.id=f.courseid
+WHERE f.bonificable=1 AND f.c_fundae IS NOT NULL AND f.c_fundae<>''
+HAVING enlace<>'ok' OR codigo_en_curso<>'ok'
+ORDER BY f.empresa, f.id;
 ```
+
+> Esta consulta (E) es la **auditoría de coherencia** que el agente ejecuta a diario (funciones 5 y 6
+> de Parte 1): marca las acciones cuyo enlace no va a un curso o cuyo código informado a FUNDAE NO
+> está montado como grupo del curso (riesgo de auditoría).
 
 ## 4. Aplicar cambios (siempre reversible)
 

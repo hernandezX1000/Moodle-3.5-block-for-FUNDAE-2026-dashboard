@@ -61,7 +61,10 @@ Agente que **mantiene actualizado y conforme el dashboard FUNDAE**, corriendo **
 5. **Coherencia NOMBRE:** denominación en FUNDAE (`fundae_oficial_stg`/factura) = nombre del curso
    (`mdl_course`). Marca diferencias (comparación normalizada, confirma dudosos). **Viable.**
 6. **Coherencia CÓDIGO:** el `c_fundae` informado a FUNDAE existe como **grupo del curso** con el
-   alumno dentro. Si no, alerta (riesgo de auditoría). **Viable.**
+   alumno dentro. Si no, alerta (riesgo de auditoría). **Viable.** — Y además **propone el FIX**:
+   crear el grupo (nombre = código) en el curso y **matricular/agrupar** a los alumnos del curso
+   (todos comparten el código). El agente **pide permiso explícito** antes de escribir en BD, con
+   backup. Auditoría = consulta (E) del runbook.
 
 **Corre a diario** (una activación puede pasar en cualquier momento) → **tarea programada**.
 Dónde vive: la detección (BD) puede ser cron en el servidor; la parte de investigar/pedir (correo,
