@@ -115,6 +115,25 @@ c_fundae = `AFF(3)-Grupo(2)`), backup + DELETE + INSERT + COMMIT.
 
 ---
 
+## 5b. Cobertura del panel — criterio FUNDAE bonificable (clasificado 6-ago)
+
+De los cursos 2026 fuera del panel, la regla de qué ES FUNDAE bonificable (debe entrar a `mdl_fundae`):
+
+**SÍ (bonificable → al panel):** Papelera Nervión · Naqua 2026.2 · Lactalis I+D (Luc, 001-01559) ·
+Tekia (2026.1/2.2) · E2Y Commerce 2026.3 (CF/FS/JM/NS + reales) · **Hyatt/Alua 2026.2** (lo supervisa
+usuario Hyatt) · **Bemobile** · **Lin3s** (grupos + 1to1 — OJO: **modalidad Presencial**) · **Sodena** ·
+**Escuela de Idiomas** (el de la 1ª parte del año, 2026.1).
+
+**NO (no FUNDAE):** Demos (Elkargi, Kuik, DEMO-ENG, RRHH) · placeholders/vacíos (4071 "Razon:…",
+3109 tuSpeaking) · **Capitole** (conversación/bonos privados) · **Cesce 1to1** · **Velcro** ·
+**SemGenCat** · Lin3s marcado "(no FUNDAE)" (3188) · E2Y **2026.3R (NS) = Nieves recuperación** (4058).
+
+**Pendiente:** ~57 cursos SÍ que faltan por añadir a `mdl_fundae` (empresa+modalidad+código por curso;
+muchos nuevos aún sin código → se consiguen del Excel oficial (propias) o factura/correo (externas)).
+El agente los detecta a diario y, al montar el curso, pregunta bonificable/no y añade con su código.
+
+---
+
 ## 6. Automatización — el AGENTE (ver `AGENTE-FUNDAE-reconciliacion.md`)
 
 **Aprendizaje grande de hoy:** los códigos de externas viven en **InvoiceNinja** (todas las

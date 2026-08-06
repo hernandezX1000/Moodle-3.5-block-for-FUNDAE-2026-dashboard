@@ -71,6 +71,16 @@ Dónde vive: la detección (BD) puede ser cron en el servidor; la parte de inves
 redactar) encaja en una **tarea programada de Cowork** (tiene acceso a Gmail). Recomendado: 1 tarea
 diaria de Cowork que hace 1→6 y te deja informe + borradores para aprobar.
 
+7. **Acceso del usuario FUNDAE (supervisión):** mantener al usuario **Fundae2026**
+   (`fundaemicro2026@tuspeaking.com`) matriculado con **rol de supervisión** en TODOS los cursos
+   de **teleformación** bonificables, **excepto Alua Hyatt**. A diario detecta cursos nuevos de
+   teleformación y lo matricula (con permiso). **Viable** (enrol + role_assignment).
+
+8. **Auditar cobertura del panel:** todos los cursos **2026 bonificables** deben estar en el panel
+   FUNDAE (`mdl_fundae`). El agente detecta cursos 2026 que **NO están** en el panel y decide si
+   deben aparecer: **bonificable → debe estar**; **no bonificable → no aparece**. Determina el
+   bonificable/no **preguntando a Hansel al montar el curso** (no lo adivina). **Viable.**
+
 **Veredicto: el agente PUEDE hacer todo Parte 1** con los datos actuales + ingesta correo/pegar +
 tu aprobación. Sin infra nueva, sin InvoiceNinja.
 
