@@ -34,7 +34,7 @@ class block_fundae extends block_base {
                   FROM {fundae} f
                   JOIN {course} c ON f.courseid = c.id
                   LEFT JOIN fundae_oficial_stg o ON o.c_fundae = f.c_fundae
-                 WHERE f.bonificable = 1
+                 WHERE f.bonificable = 1 AND f.validado = 1
                  ORDER BY f.empresa, f.c_fundae";
         $cursos = $DB->get_records_sql($sql);
 
