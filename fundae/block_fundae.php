@@ -58,7 +58,7 @@ class block_fundae extends block_base {
         $html = '<div style="padding:10px;font-family:Arial,sans-serif;">';
 
         $html .= '<div style="background:#fff;border:1px solid #ddd;padding:10px;margin-bottom:10px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;">';
-        $html .= '<input type="text" id="' . $uid . '_search" placeholder="Buscar..." style="flex:1;min-width:200px;padding:6px;border:1px solid #ccc;border-radius:4px;">';
+        $html .= '<input type="text" id="' . $uid . '_search" placeholder="Buscar por ID, acción/grupo, empresa, CIF o denominación…" style="flex:1;min-width:200px;padding:6px;border:1px solid #ccc;border-radius:4px;">';
         $html .= '<select id="' . $uid . '_empresa" style="padding:6px;border:1px solid #ccc;border-radius:4px;"><option value="">Todas las empresas</option>';
         foreach ($empresas as $e) $html .= '<option value="' . htmlspecialchars($e) . '">' . htmlspecialchars($e) . '</option>';
         $html .= '</select>';
