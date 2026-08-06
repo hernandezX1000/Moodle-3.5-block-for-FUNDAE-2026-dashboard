@@ -132,6 +132,18 @@ usuario Hyatt) · **Bemobile** · **Lin3s** (grupos + 1to1 — OJO: **modalidad 
 muchos nuevos aún sin código → se consiguen del Excel oficial (propias) o factura/correo (externas)).
 El agente los detecta a diario y, al montar el curso, pregunta bonificable/no y añade con su código.
 
+**REGLA Propia/Externa (Hansel 6-ago):** si una acción es **bonificable** pero **NO está en el Excel
+oficial** (y el Excel está actualizado) → es **EXTERNA** (la gestiona la empresa, código propio, ID "—");
+para las externas, el agente **busca los datos en el correo** de la empresa. Si está en el Excel → **Propia**.
+
+**REGLA Modalidad (Hansel 6-ago):** si el curso **tiene botón de reservar clase** → **Teleformación**;
+si **NO tiene** botón de reservas → **Presencial (Aula Virtual)**. (Detección técnica: presencia del
+bloque/función de reservas en el curso — p.ej. `block_acuityblock`/misclases; verificar cuál es el marcador.)
+
+**STAGING — validar antes de que lo vea FUNDAE:** columna `validado` en `mdl_fundae`. El dashboard
+que ve FUNDAE filtra `validado=1`. El agente inserta propuestas con `validado=0` (invisibles a FUNDAE);
+Hansel revisa la vista de pendientes y aprueba → `validado=1` → aparece. Las 133 actuales = `validado=1`.
+
 ---
 
 ## 6. Automatización — el AGENTE (ver `AGENTE-FUNDAE-reconciliacion.md`)

@@ -81,6 +81,16 @@ diaria de Cowork que hace 1→6 y te deja informe + borradores para aprobar.
    deben aparecer: **bonificable → debe estar**; **no bonificable → no aparece**. Determina el
    bonificable/no **preguntando a Hansel al montar el curso** (no lo adivina). **Viable.**
 
+9. **Verificar el bloque FUNDAE en los cursos:** comprobar que el **bloque FUNDAE a medida**
+   (`block_fundae`/`block_fundae_inspector`) está **añadido, activo y visible para el usuario FUNDAE**
+   en cada curso de teleformación. Detección: `mdl_block_instances` (blockname) en el contexto del
+   curso + `mdl_block_positions`/visibilidad. Si falta o está oculto → lo marca (y propone añadirlo). **Viable.**
+10. **Informe de acceso del usuario FUNDAE:** decir **qué cursos ha accedido** el usuario FUNDAE
+    (5676) y **cuáles no**. Detección: `mdl_user_lastaccess` (userid=5676, courseid, timeaccess). **Viable.**
+
+**REGLA (draft):** TODO lo que proponga el agente entra **solo en borrador** (`validado=0` / estado
+"validando"), invisible para FUNDAE, hasta que Hansel lo valide.
+
 **Veredicto: el agente PUEDE hacer todo Parte 1** con los datos actuales + ingesta correo/pegar +
 tu aprobación. Sin infra nueva, sin InvoiceNinja.
 
